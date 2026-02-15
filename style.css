@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #0a0e27;
+    --accent-green: #00ff88;
+    --accent-orange: #ff6b35;
+    --accent-blue: #4ecdc4;
+    --accent-purple: #a855f7;
+    --text-light: #e0e6ff;
+    --text-dim: #8b9dc3;
+}
+
+body {
+    font-family: 'Space Mono', monospace;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    color: var(--text-light);
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Étoiles animées */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+#canvas-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+/* Interface overlay */
+.ui-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.title {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    animation: fadeInDown 1s ease-out;
+}
+
+.title h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+}
+
+.title p {
+    font-size: 1rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.instructions {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    pointer-events: none;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.project-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 3px solid var(--accent-orange);
+}
+
+.project-card h4 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent-orange);
+    margin-bottom: 10px;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.skill-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+@media (max-width: 768px) {
+    .title h1 {
+        font-size: 2rem;
+    }
+}
+
+.island-label {
+    position: absolute;
+    background: rgba(10, 14, 39, 0.9);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border-left: 4px solid var(--accent-color);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    pointer-events: none; /* Ne bloque pas le clic 3D */
+    transform: translate(-50%, -100%); /* Centre le label au-dessus du point */
+    white-space: nowrap;
+    z-index: 5;
+    transition: opacity 0.3s;
+}
+
+.island-label.visible {
+    opacity: 1;
+}
+
+/* Modifie ces classes dans ton style actuel */
+
+.info-panel {
+    position: fixed;
+    top: 0; /* Prend toute la hauteur */
+    right: -50%; /* Caché à droite */
+    width: 50%; /* Prend la moitié de l'écran */
+    height: 100vh;
+    background: rgba(10, 14, 39, 0.85); /* Un peu plus opaque pour la lisibilité */
+    backdrop-filter: blur(20px);
+    border-left: 3px solid var(--panel-accent, var(--accent-green));
+    padding: 60px; /* Plus d'espace */
+    transition: right 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1000;
+    box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+}
+
+.info-panel.active {
+    right: 0;
+}
+
+#main-view {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Quand le panel est ouvert, on décale TOUTE la vue */
+#main-view.shifted {
+    transform: translateX(-25%);
+}
+
+/* Assure-toi que les éléments internes occupent bien tout l'espace */
+#canvas-container, .stars, .ui-overlay, #island-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+.panel-header h2 { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+.close-panel-btn { position: absolute; top: 10px; right: 20px; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
+.panel-content {
+    margin-top: 20px;
+    height: calc(100% - 120px); /* Laisse de la place pour le header */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Scrollbar stylisée "Cyberpunk" */
+.panel-content::-webkit-scrollbar { width: 5px; }
+.p

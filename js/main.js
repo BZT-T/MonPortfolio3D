@@ -10,11 +10,32 @@ let isCentering = false;
 let dragStartPosition = { x: 0, y: 0 };
 
 const contentFlow = [
-    { name: 'Présentation', modal: 'modal-presentation', emoji: '🏠', color: '#ff0000' },
-    { name: 'Projets', modal: 'modal-projets', emoji: '💼', color: '#ff0000' },
-    { name: 'Compétences', modal: 'modal-competences', emoji: '🛠️', color: '#ff0000' },
-    { name: 'Contact', modal: 'modal-contact', emoji: '📧', color: '#ff0000' }
+    {
+        name: 'Présentation',
+        templateId: 'tpl-presentation',
+        emoji: '🏠',
+        color: '#00ff88'
+    },
+    {
+        name: 'Projets',
+        templateId: 'tpl-projets',
+        emoji: '💼',
+        color: '#ff6b35'
+    },
+    {
+        name: 'Compétences',
+        templateId: 'tpl-competences',
+        emoji: '🛠️',
+        color: '#4ecdc4'
+    },
+    {
+        name: 'Contact',
+        templateId: 'tpl-contact',
+        emoji: '📧',
+        color: '#a855f7'
+    }
 ];
+
 let currentStep = 0; // On commence toujours par le premier élément de contentFlow
 
 let isMouseDown = false;
@@ -63,7 +84,7 @@ function init() {
 
         isRotating = false; // On stoppe la rotation auto quand l'utilisateur touche la planète
         isCentering = false; // AJOUT : On annule le recentrage auto si l'utilisateur reprend la main
-        
+
         resetDragFlag();
         isMouseDown = true;
 
@@ -107,13 +128,10 @@ function init() {
     });
 
     window.addEventListener('click', (e) => {
-        // (Garde ton test de seuil de drag ici)
-        console.log("click");
-
         if (isDragging()) {
             resetDragFlag();
-            return
-        };
+            return;
+        }
         resetDragFlag();
 
         raycaster.setFromCamera(mouse, camera);
@@ -125,25 +143,24 @@ function init() {
                 obj = obj.parent;
             }
 
-            // Si l'île n'a pas encore de contenu et qu'il reste du contenu dans le flow
+            // DÉCOUVERTE D'UNE NOUVELLE ÎLE
             if (!obj.userData.visited && currentStep < contentFlow.length) {
-                // On attribue le contenu actuel à cette île
                 const content = contentFlow[currentStep];
-                obj.userData.modal = content.modal;
+
+                // ON UNIFORMISE ICI : on stocke l'objet sous le nom 'content'
+                obj.userData.content = content;
                 obj.userData.visited = true;
 
                 addFlagToIsland(obj, content);
 
-                // On peut même changer la couleur de l'onde pour qu'elle corresponde au contenu débloqué
                 const wave = obj.getObjectByName("wave");
                 if (wave) wave.material.color.set(content.color);
 
                 currentStep++;
             }
 
-            // Si l'île a maintenant un contenu (soit déjà visitée, soit on vient de lui donner)
-            if (obj.userData.modal) {
-                // Recentrage
+            // AFFICHAGE DU PANNEAU
+            if (obj.userData.content) {
                 const targetPosition = obj.position.clone();
                 const rawTargetY = -Math.atan2(targetPosition.x, targetPosition.z);
                 const rawTargetX = Math.asin(targetPosition.y / targetPosition.length());
@@ -152,7 +169,8 @@ function init() {
                 targetRotation.x = getShortestAngle(planet.rotation.x, rawTargetX);
                 isCentering = true;
 
-                setTimeout(() => openPanel(obj.userData.modal), 200);
+                // Appel uniforme
+                setTimeout(() => openPanel(obj.userData.content), 200);
             }
         }
     });

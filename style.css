@@ -232,5 +232,94 @@ body {
 }
 
 /* Scrollbar stylisée "Cyberpunk" */
-.panel-content::-webkit-scrollbar { width: 5px; }
-.p
+.panel-content::-webkit-scrollbar { 
+    width: 5px; 
+}
+
+.panel-content::-webkit-scrollbar-track { 
+    background: rgba(255, 255, 255, 0.05); 
+}
+
+.panel-content::-webkit-scrollbar-thumb { 
+    background: var(--panel-accent, var(--accent-green)); 
+    border-radius: 10px;
+}
+
+/* Conteneur global du template */
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espace entre les blocs */
+    padding-top: 15px;
+    padding-bottom: 40px;
+}
+
+/* Style de chaque section */
+.info-section {
+    position: relative;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s;
+}
+
+.info-section:hover {
+    border-left-color: var(--panel-accent);
+}
+
+/* Le petit label technique en haut de chaque bloc */
+.section-tag {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    background: var(--primary);
+    padding: 2px 8px;
+    color: var(--panel-accent);
+    letter-spacing: 1px;
+    border: 1px solid var(--panel-accent);
+}
+
+/* Style du parcours (Timeline simple) */
+.path-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.path-item .year {
+    font-weight: bold;
+    color: var(--panel-accent);
+    min-width: 60px;
+}
+
+.path-item.highlight {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Objectif mis en avant */
+.objective {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--panel-accent);
+    font-style: italic;
+}
+
+/* Footer CV */
+.cv-discovery {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px dashed var(--panel-accent);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}

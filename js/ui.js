@@ -1,17 +1,3 @@
-const contentData = {
-    'modal-presentation': {
-        title: "Présentation",
-        icon: "🏠",
-        html: "<h3>Qui suis-je ?</h3><p>Développeur créatif...</p>"
-    },
-    'modal-projets': {
-        title: "Projets",
-        icon: "💼",
-        html: "<ul><li>Projet A</li><li>Projet B</li></ul>"
-    }
-    // Ajoute les autres ici...
-};
-
 // Créer les étoiles en arrière-plan
 function createStars() {
     const container = document.getElementById('stars');
@@ -26,20 +12,31 @@ function createStars() {
     }
 }
 
-function openPanel(modalKey) {
-    const data = contentData[modalKey];
-    if (!data) return;
+function openPanel(content) {
+    if (!content) return;
 
-    // Injecter le contenu
-    document.getElementById('panel-title').innerText = data.title;
-    document.getElementById('panel-icon').innerText = data.icon;
-    document.getElementById('panel-content').innerHTML = data.html;
+    // 1. En-tête du panneau
+    document.getElementById('panel-title').innerText = content.name;
+    document.getElementById('panel-icon').innerText = content.emoji;
 
-    // OUVERTURE : On active le panel et on décale le canvas
+    // 2. Injection du Template
+    const panelBody = document.getElementById('panel-content');
+    const template = document.getElementById(content.templateId);
+
+    if (template) {
+        panelBody.innerHTML = ''; 
+        const clone = template.content.cloneNode(true);
+        panelBody.appendChild(clone);
+    } else {
+        panelBody.innerHTML = `<p>Le contenu pour ${content.name} arrive bientôt...</p>`;
+    }
+
+    // 3. Style et Animation
+    document.getElementById('info-panel').style.setProperty('--panel-accent', content.color);
     document.getElementById('info-panel').classList.add('active');
     document.getElementById('main-view').classList.add('shifted');
 
-    isCentering = false; // On laisse le décalage CSS gérer la vue
+    isCentering = false; 
     isRotating = false;
 }
 

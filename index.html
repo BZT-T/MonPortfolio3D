@@ -49,49 +49,153 @@
     <script src="js/main.js"></script>
 
     <template id="tpl-presentation">
-    <div class="info-wrapper">
-        <section class="info-section intro">
-            <div class="section-tag">Qui je suis</div>
-            <p>
-                Bonjour, moi c'est <strong>Yassine</strong> ! Mon aventure dans l'informatique a commencé au lycée, 
-                mais c’est sur le terrain, en entreprise, que j’ai vraiment eu le déclic. 
-                Ce que j'aime par-dessus tout, c'est créer des outils qui <strong>simplifient la vie</strong> des utilisateurs.
-            </p>
-        </section>
+        <div class="info-wrapper">
+            <section class="info-section intro">
+                <div class="section-tag">Qui je suis</div>
+                <p>
+                    Bonjour, moi c'est <strong>Yassine</strong> ! Mon aventure dans l'informatique a commencé au lycée,
+                    mais c’est sur le terrain, en entreprise, que j’ai vraiment eu le déclic.
+                    Ce que j'aime par-dessus tout, c'est créer des outils qui <strong>simplifient la vie</strong> des
+                    utilisateurs.
+                </p>
+            </section>
 
-        <section class="info-section path">
-            <div class="section-tag">Parcours scolaire</div>
-            <div class="path-item">
-                <span class="year">BUT</span>
-                <p>Informatique à l'IUT de Montpellier.</p>
-            </div>
-            <div class="path-item">
-                <span class="year">MASTER</span>
-                <p>ILSEN (Ingénierie du Logiciel de la Société Numérique) au CERI à Avignon.</p>
-            </div>
-            <div class="path-item highlight">
-                <span class="year">GENLOG</span>
-                <p>3 ans d'alternance : développement d'une application CRM sur Windows et d'un site internet type coffre fort numérique.</p>
-            </div>
-        </section>
+            <section class="info-section path">
+                <div class="section-tag">Parcours scolaire</div>
+                <div class="path-item">
+                    <span class="year">BUT</span>
+                    <p>Informatique à l'IUT de Montpellier.</p>
+                </div>
+                <div class="path-item">
+                    <span class="year">MASTER</span>
+                    <p>ILSEN (Ingénierie du Logiciel de la Société Numérique) au CERI à Avignon.</p>
+                </div>
+                <div class="path-item highlight">
+                    <span class="year">GENLOG</span>
+                    <p>3 ans d'alternance : développement d'une application CRM sur Windows et d'un site internet type
+                        coffre fort numérique.</p>
+                </div>
+            </section>
 
-        <section class="info-section profile">
-            <div class="section-tag">Mon profil</div>
-            <p>
-                Je suis quelqu'un de <strong>créatif</strong> et très <strong>curieux</strong>. J'aime comprendre le "pourquoi" 
-                en posant des questions, ce qui m'aide à m'adapter vite et à prendre des responsabilités.
-            </p>
-            <p class="objective">
-                Mon objectif : Créer des logiciels qui font progresser notre société !
-            </p>
-        </section>
+            <section class="info-section profile">
+                <div class="section-tag">Mon profil</div>
+                <p>
+                    Je suis quelqu'un de <strong>créatif</strong> et très <strong>curieux</strong>. J'aime comprendre le
+                    "pourquoi"
+                    en posant des questions, ce qui m'aide à m'adapter vite et à prendre des responsabilités.
+                </p>
+                <p class="objective">
+                    Mon objectif : Créer des logiciels qui font progresser notre société !
+                </p>
+            </section>
 
-        <div class="cv-discovery">
-            <span class="icon">🛰️</span>
-            <p>Note : Mon CV s'est sûrement perdu sur le satellite... À vous de le retrouver !</p>
+            <div class="cv-discovery">
+                <span class="icon">🛰️</span>
+                <p>Note : Mon CV s'est sûrement perdu sur le satellite... À vous de le retrouver !</p>
+            </div>
         </div>
+    </template>
+
+    <template id="tpl-projets">
+        <div class="info-wrapper">
+            <h2 class="section-main-title">Réalisations</h2>
+
+            <article class="project-card">
+                <div class="project-category">PROJET PERSO</div>
+                <div class="project-carousel">
+                    <div class="carousel-track">
+                        <img src="img/fisabilillah1.png" class="carousel-img active">
+                        <img src="img/fisabilillah2.png" class="carousel-img">
+                        <img src="img/fisabilillah3.png" class="carousel-img">
+                    </div>
+
+                    <button class="carousel-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(this, 1)">&#10095;</button>
+
+                    <div class="carousel-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Fisabilillah</h3>
+                    <p>Application de gestion pour association : suivi pédagogique des élèves, annuaire parents et
+                        outils de gestion financière (collectes & dépenses).</p>
+                    <div class="tech-stack">
+                        <span class="tech">WLangage</span>
+                        <span class="tech">MySQL</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-category">SCOLAIRE (BUT 3)</div>
+                <div class="project-carousel">
+                    <div class="carousel-track">
+                        <img src="img/save1.png" class="carousel-img active">
+                        <img src="img/save2.png" class="carousel-img">
+                    </div>
+
+                    <button class="carousel-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(this, 1)">&#10095;</button>
+
+                    <div class="carousel-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Backup System</h3>
+                    <p>Solution client-serveur de sauvegarde à distance. Inclut un système de logs en temps réel et un
+                        versionning sécurisé des fichiers.</p>
+                    <div class="tech-stack">
+                        <span class="tech">WLangage</span>
+                        <span class="tech">MySQL</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-category">SCOLAIRE (BUT 2)</div>
+                <div class="project-carousel">
+                    <div class="carousel-track">
+                        <img src="img/eVote1.png" class="carousel-img active">
+                        <img src="img/eVote2.png" class="carousel-img">
+                    </div>
+
+                    <button class="carousel-btn prev" onclick="moveCarousel(this, -1)">&#10094;</button>
+                    <button class="carousel-btn next" onclick="moveCarousel(this, 1)">&#10095;</button>
+
+                    <div class="carousel-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>E-Vote Solutions</h3>
+                    <p>Application de vote électronique sécurisée pour entreprises, facilitant les prises de décision
+                        collaboratives en interne.</p>
+                    <div class="tech-stack">
+                        <span class="tech">Java</span>
+                        <span class="tech">JavaFX</span>
+                        <span class="tech">MySQL</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </template>
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+
+        <button class="lb-btn prev" onclick="changeLightboxImage(-1)">&#10094;</button>
+
+        <div class="lb-content">
+            <img id="lightbox-img" src="" alt="Aperçu grand format">
+        </div>
+
+        <button class="lb-btn next" onclick="changeLightboxImage(1)">&#10095;</button>
     </div>
-</template>
 </body>
 
 </html>

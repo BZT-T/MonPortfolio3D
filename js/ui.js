@@ -1,3 +1,6 @@
+let currentGalleryImages = [];
+let currentImageIndex = 0;
+
 // Créer les étoiles en arrière-plan
 function createStars() {
     const container = document.getElementById('stars');
@@ -46,9 +49,84 @@ function closePanel() {
     isRotating = true;
 }
 
+function moveCarousel(button, direction) {
+    const carousel = button.closest('.project-carousel');
+    const images = carousel.querySelectorAll('.carousel-img');
+    const dots = carousel.querySelectorAll('.dot');
+    
+    // Trouver l'index actuel
+    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+    
+    // Retirer la classe active partout
+    images[currentIndex].classList.remove('active');
+    dots[currentIndex].classList.remove('active');
+    
+    // Calculer le nouvel index
+    currentIndex += direction;
+    
+    // Bouclage (si on dépasse, on revient au début ou à la fin)
+    if (currentIndex >= images.length) currentIndex = 0;
+    if (currentIndex < 0) currentIndex = images.length - 1;
+    
+    // Appliquer la nouvelle classe active
+    images[currentIndex].classList.add('active');
+    dots[currentIndex].classList.add('active');
+}
+
+
+// Fonction pour fermer la lightbox
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+}
+
+function openLightbox(imgElement) {
+    const carousel = imgElement.closest('.carousel-track');
+    // On récupère toutes les images de CE projet uniquement
+    currentGalleryImages = Array.from(carousel.querySelectorAll('.carousel-img'));
+    currentImageIndex = currentGalleryImages.indexOf(imgElement);
+
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('active');
+}
+
+function updateLightbox() {
+    const lbImg = document.getElementById('lightbox-img');
+    lbImg.src = currentGalleryImages[currentImageIndex].src;
+    
+    // On cache les flèches s'il n'y a qu'une seule image
+    const btns = document.querySelectorAll('.lb-btn');
+    btns.forEach(b => b.style.display = currentGalleryImages.length > 1 ? 'block' : 'none');
+}
+
+function changeLightboxImage(direction) {
+    currentImageIndex += direction;
+    
+    // Bouclage
+    if (currentImageIndex >= currentGalleryImages.length) currentImageIndex = 0;
+    if (currentImageIndex < 0) currentImageIndex = currentGalleryImages.length - 1;
+    
+    updateLightbox();
+}
+
+// Mise à jour de l'écouteur de clic global
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('carousel-img')) {
+        openLightbox(e.target);
+    }
+});
+
+// Mise à jour de l'écouteur Lightbox pour le nouveau nom de classe
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('carousel-img')) {
+        console.log("co");
+        openLightbox(e.target.src);
+    }
+});
+
 // Initialiser les écouteurs d'événements UI
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePanel();
 });
+
 
 createStars();

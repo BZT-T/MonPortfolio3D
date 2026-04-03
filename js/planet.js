@@ -80,3 +80,46 @@ function addFlagToIsland(islandGroup, content) {
         wave.material.opacity = 0.8;
     }
 }
+
+/**
+ * Crée un petit satellite géométrique (Easter Egg)
+ */
+function createSatellite() {
+    // 1. Conteneur principal (le satellite complet)
+    satelliteGroup = new THREE.Group();
+
+    // 2. Le corps du satellite (un petit cube central)
+    const bodyGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    const bodyMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x888888, 
+        specular: 0x111111, 
+        shininess: 30 
+    });
+    const bodyMesh = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    satelliteGroup.add(bodyMesh);
+
+    // 3. Les panneaux solaires (deux rectangles fins)
+    const panelGeometry = new THREE.BoxGeometry(0.8, 0.02, 0.3); // Larges, fins, profonds
+    const panelMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x0055ff, // Bleu "panneau solaire"
+        specular: 0xffffff, // Très réfléchissant
+        shininess: 100 
+    });
+    
+    // Panneau gauche
+    const panelLeft = new THREE.Mesh(panelGeometry, panelMaterial);
+    panelLeft.position.x = -0.5; // Décalé sur la gauche du corps
+    satelliteGroup.add(panelLeft);
+
+    // Panneau droit (même géométrie)
+    const panelRight = new THREE.Mesh(panelGeometry, panelMaterial);
+    panelRight.position.x = 0.5; // Décalé sur la droite
+    satelliteGroup.add(panelRight);
+
+    // 4. Position initiale (éloignée de la planète)
+    satelliteGroup.position.set(10, 2, 0); 
+    satelliteGroup.lookAt(0, 0, 0); // Il "regarde" la planète
+
+    // 5. Ajout à la scène
+    scene.add(satelliteGroup);
+}

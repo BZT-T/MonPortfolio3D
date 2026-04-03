@@ -8,6 +8,7 @@ let previousMousePosition = { x: 0, y: 0 };
 let targetRotation = { x: 0, y: 0 };
 let isCentering = false;
 let dragStartPosition = { x: 0, y: 0 };
+let satelliteGroup;
 
 const contentFlow = [
     {
@@ -69,6 +70,7 @@ function init() {
     scene.add(pointLight1);
 
     // 5. Création des objets (venant de planet.js)
+    createSatellite();
     createPlanet();
     createIslands();
 
@@ -135,42 +137,54 @@ function init() {
         resetDragFlag();
 
         raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(islands, true);
+        // On intersecte tout le monde
+        const intersects = raycaster.intersectObjects([...islands, satelliteGroup], true);
 
         if (intersects.length > 0) {
-            let obj = intersects[0].object;
-            while (obj.parent && obj.userData.visited === undefined) {
+            const firstHit = intersects[0].object;
+
+            console.log(1);
+            // --- CAS 1 : CLIC SUR LE SATELLITE (Prioritaire) ---
+            if (satelliteGroup && (firstHit === satelliteGroup || satelliteGroup.getObjectById(firstHit.id))) {                
+                console.log(2);
+                revealAllIslands();
+                return;
+            }
+
+            // --- CAS 2 : CLIC SUR UNE ÎLE ---
+            let obj = firstHit;
+            // On remonte pour trouver le groupe de l'île
+            while (obj.parent && !islands.includes(obj)) {
                 obj = obj.parent;
             }
+            console.log(3);
+            if (islands.includes(obj)) {
+                // Logique de visite des îles
+                if (!obj.userData.visited && currentStep < contentFlow.length) {
+                    const content = contentFlow[currentStep];
+                    obj.userData.content = content;
+                    obj.userData.visited = true;
 
-            // DÉCOUVERTE D'UNE NOUVELLE ÎLE
-            if (!obj.userData.visited && currentStep < contentFlow.length) {
-                const content = contentFlow[currentStep];
+                    addFlagToIsland(obj, content);
 
-                // ON UNIFORMISE ICI : on stocke l'objet sous le nom 'content'
-                obj.userData.content = content;
-                obj.userData.visited = true;
+                    const wave = obj.getObjectByName("wave");
+                    if (wave) wave.material.color.set(content.color);
 
-                addFlagToIsland(obj, content);
+                    currentStep++;
+                }
 
-                const wave = obj.getObjectByName("wave");
-                if (wave) wave.material.color.set(content.color);
+                // Affichage du panneau
+                if (obj.userData.content) {
+                    const targetPosition = obj.position.clone();
+                    const rawTargetY = -Math.atan2(targetPosition.x, targetPosition.z);
+                    const rawTargetX = Math.asin(targetPosition.y / targetPosition.length());
 
-                currentStep++;
-            }
+                    targetRotation.y = getShortestAngle(planet.rotation.y, rawTargetY);
+                    targetRotation.x = getShortestAngle(planet.rotation.x, rawTargetX);
+                    isCentering = true;
 
-            // AFFICHAGE DU PANNEAU
-            if (obj.userData.content) {
-                const targetPosition = obj.position.clone();
-                const rawTargetY = -Math.atan2(targetPosition.x, targetPosition.z);
-                const rawTargetX = Math.asin(targetPosition.y / targetPosition.length());
-
-                targetRotation.y = getShortestAngle(planet.rotation.y, rawTargetY);
-                targetRotation.x = getShortestAngle(planet.rotation.x, rawTargetX);
-                isCentering = true;
-
-                // Appel uniforme
-                setTimeout(() => openPanel(obj.userData.content), 200);
+                    setTimeout(() => openPanel(obj.userData.content), 200);
+                }
             }
         }
     });
@@ -183,6 +197,9 @@ function init() {
  * Boucle d'animation (60 FPS)
  */
 function animate() {
+    
+    const time = Date.now() * 0.001;
+
     requestAnimationFrame(animate);
 
     if (isCentering) {
@@ -199,6 +216,26 @@ function animate() {
         }
     } else if (isRotating && planet) {
         planet.rotation.y += 0.0001;
+    }
+
+    if (satelliteGroup) {
+        // Calcul de la position orbitale (Cercle sur le plan XZ, légèrement incliné)
+        const orbitRadius = 5; // Un peu plus loin que les îles
+        const orbitSpeed = 0.5;   // Vitesse de l'orbite
+
+        // X = R * cos(angle), Z = R * sin(angle)
+        // L'angle évolue avec le temps
+        satelliteGroup.position.x = Math.cos(time * orbitSpeed) * orbitRadius;
+        satelliteGroup.position.z = Math.sin(time * orbitSpeed) * orbitRadius;
+        
+        // Petite inclinaison sur l'axe Y pour ne pas être parfaitement plat
+        satelliteGroup.position.y = 2; // Position fixe en hauteur
+
+        // Toujours regarder vers le centre (la planète)
+        satelliteGroup.lookAt(0, 0, 0); 
+        
+        // Rotation sur lui-même (facultatif, pour le style)
+        satelliteGroup.rotation.z += 0.01;
     }
 
     // Animation de "pulsation" des îles (venant de tes anciens scripts)

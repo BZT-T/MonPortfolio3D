@@ -128,5 +128,46 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePanel();
 });
 
+function discoverIsland(obj) {
+    // Si l'île a déjà été visitée ou si on a épuisé le contenu, on s'arrête
+    if (obj.userData.visited || currentStep >= contentFlow.length) return;
+
+    const content = contentFlow[currentStep];
+    obj.userData.content = content;
+    obj.userData.visited = true;
+
+    // Ajout du drapeau/emoji
+    if (typeof addFlagToIsland === "function") {
+        addFlagToIsland(obj, content);
+    }
+
+    // Changement de couleur de la vague
+    const wave = obj.getObjectByName("wave");
+    if (wave) wave.material.color.set(content.color);
+
+    // On passe à l'étape suivante
+    currentStep++;
+}
+
+function revealAllIslands() {
+    console.log("🛰️ Scanner activé : Déploiement de toutes les îles !");
+    
+    islands.forEach((island, index) => {
+        setTimeout(() => {
+            // On appelle la nouvelle fonction de découverte
+            discoverIsland(island);
+            
+            // Effet visuel de flash
+            const mesh = island.children.find(c => c.type === "Mesh");
+            if (mesh && mesh.material) {
+                const originalColor = mesh.material.color.getHex();
+                mesh.material.color.setHex(0x00ff88); 
+                setTimeout(() => {
+                    mesh.material.color.setHex(originalColor);
+                }, 500);
+            }
+        }, index * 200);
+    });
+}
 
 createStars();
